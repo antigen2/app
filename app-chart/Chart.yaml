@@ -1,0 +1,7 @@
+apiVersion: v2
+name: app-chart
+description: App netology-diplom
+
+type: application
+
+version: 1.0.0
