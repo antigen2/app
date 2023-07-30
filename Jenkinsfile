@@ -54,7 +54,7 @@ pipeline {
     stage('Apply Kubernetes files') {
       steps {
         withKubeConfig([credentialsId: 'k8s', serverUrl: 'https://158.160.11.73:6443']) {
-          sh '$(which kubectl) apply -f app-deploy.yml'
+          sh '/usr/local/bin/kubectl apply -f app-deploy.yml'
         }
       }
     }
