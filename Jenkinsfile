@@ -55,10 +55,9 @@ pipeline {
     stage('Apply Kubernetes files') {
       steps {
         withKubeConfig([
-            credentialsId: 'kubernetes-admin-client-certificate-data',
-            serverUrl: 'https://158.160.11.73:6443'], 
+            credentialsId: 'k8s',
             namespace: 'stage') {
-                sh "$(which kubectl) apply -f app-deploy.yml"
+                sh "kubectl apply -f app-deploy.yml"
         }
 
       }
