@@ -60,7 +60,7 @@ pipeline {
                 contextName: 'kubernetes-admin@cluster.local',
                 clusterName: 'cluster.local',
                 namespace: 'stage'
-                ])
+                ]) {
           sh 'kubectl apply -f app-deploy.yml'
         }
       }
