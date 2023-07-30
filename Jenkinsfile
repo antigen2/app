@@ -56,12 +56,5 @@ pipeline {
       }
     }
 
-#    stage('Deploying myapp-deploy to Kubernetes') {
-#      steps {
-#        script {
-#          kubernetesDeploy (configs:'app-deploy.yml')
-#        }
-#      }
-#    }
   }    
 }    
