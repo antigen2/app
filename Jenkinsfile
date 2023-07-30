@@ -56,7 +56,7 @@ pipeline {
       steps {
         withKubeConfig([
             credentialsId: 'k8s',
-            namespace: 'stage') {
+            namespace: 'stage']) {
                 sh "kubectl apply -f app-deploy.yml"
         }
 
