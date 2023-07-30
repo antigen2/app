@@ -1,15 +1,23 @@
-#!/usr/bin/env groovy
-
 pipeline {
   environment {
     dockerimagename = "antigen2/app"
     dockerImage = ""
+    
   }
   agent any
   stages {
     stage('Checkout Source') {
       steps {
         git branch: 'main', url: 'https://github.com/antigen2/app.git'
+      }
+    }
+    stage('Checkout tag') {
+      steps{
+        script {
+          sh 'git fetch'
+          gitTag=sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
+          echo "gitTag output: ${gitTag}"
+        }
       }
     }
     stage('Build image') {
@@ -19,18 +27,35 @@ pipeline {
         }
       }
     }
-    stage('Pushing Image') {
+    stage('Pushing Image:tags') {
       environment {
                registryCredential = 'dockerhub-credentials'
            }
       steps{
         script {
           docker.withRegistry( 'https://index.docker.io/v1/', registryCredential ) {
-            dockerImage.push("latest")
-            dockerImage.push("1.0.$env.BUILD_NUMBER")
+            dockerImage.push("${gitTag}")
           }
         }
       }
     }
-  }
-}
+    stage('sed env') {
+      environment {
+              envTag = ("${gitTag}")
+           }    
+      steps{
+        script {
+          sh "sed -i \'18,22 s/gitTag/\'$envTag\'/g\' app-deploy.yml"
+          sh 'cat app-deploy.yml'
+        }
+      }
+    }
+    stage('Deploying myapp-deploy to Kubernetes') {
+      steps {
+        script {
+          kubernetesDeploy (configs:'app-deploy.yml', kubeconfigId:'k8s' )
+        }
+      }
+    }
+  }    
+}    
