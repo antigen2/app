@@ -50,12 +50,18 @@ pipeline {
         }
       }
     }
-    stage('Deploying myapp-deploy to Kubernetes') {
-      steps {
-        script {
-          kubernetesDeploy (configs:'app-deploy.yml')
-        }
+    stage('Apply Kubernetes files') {
+      withKubeConfig([credentialsId: 'k8s', serverUrl: 'https://158.160.11.73:6443']) {
+        sh 'kubectl apply -f app-deploy.yml'
       }
     }
+
+#    stage('Deploying myapp-deploy to Kubernetes') {
+#      steps {
+#        script {
+#          kubernetesDeploy (configs:'app-deploy.yml')
+#        }
+#      }
+#    }
   }    
 }    
