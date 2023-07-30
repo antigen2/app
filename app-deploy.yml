@@ -17,7 +17,7 @@ spec:
         app: app
     spec:
       containers:
-        - image: antigen2/nginx:netology-v1
+        - image: antigen2/app:latest
           imagePullPolicy: IfNotPresent
           name: app
       terminationGracePeriodSeconds: 30
