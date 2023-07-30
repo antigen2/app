@@ -27,7 +27,7 @@ pipeline {
         script {
           docker.withRegistry( 'https://index.docker.io/v1/', registryCredential ) {
             dockerImage.push("latest")
-            dockerImage.push("$env.BUILD_NUMBER")
+            dockerImage.push("1.0.$env.BUILD_NUMBER")
           }
         }
       }
