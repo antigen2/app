@@ -32,8 +32,5 @@ pipeline {
         }
       }
     }
-    stage('Clean existing image') {
-      sh "docker rmi docker-image"
-    }
   }
 }
