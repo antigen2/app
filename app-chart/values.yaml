@@ -1,8 +1,0 @@
-image_frontend:
-  repository: "antigen2/app"
-  tag: ""
-
-image:
-  tag: "1.0.0"
-
-namespace: ""
