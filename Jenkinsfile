@@ -35,6 +35,7 @@ pipeline {
         script {
           docker.withRegistry( 'https://index.docker.io/v1/', registryCredential ) {
             dockerImage.push("${gitTag}")
+            dockerImage.push("latest")
           }
         }
       }
@@ -50,21 +51,17 @@ pipeline {
         }
       }
     }
-
-
     stage('Apply Kubernetes files') {
       steps {
         withKubeConfig([
-            credentialsId: 'k8s',
-            namespace: 'stage']) {
-                sh 'env'
-                sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'  
-                sh 'chmod u+x ./kubectl'  
-                sh "./kubectl apply -f app-deploy.yml"
+          credentialsId: 'k8s',
+          namespace: 'stage']) {
+            sh 'env'
+            sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
+            sh 'chmod u+x ./kubectl'
+            sh "./kubectl apply -f app-deploy.yml"
         }
-
       }
     }
-
-  }    
+  }
 }    
